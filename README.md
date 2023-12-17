@@ -13,5 +13,5 @@ Task to be performed:
 - •	Write a query to display the employee id, first name, and salary of the employees who earn a salary that is higher than the salary of all the shipping clerks (JOB_ID = HP122). Sort the results of the salary in ascending order.
 - •	Write a query to display the first name, employee id, and salary of the first three employees with highest salaries.
 
-Author: Karunakar Reddy
-Tools used: MySQL
+-Author: Karunakar Reddy
+-Tools used: MySQL
