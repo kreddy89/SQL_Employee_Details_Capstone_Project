@@ -1,0 +1,190 @@
+-- CREATE a new database
+-- SQl queries are case insensitive in nature.
+
+CREATE DATABASE BA;
+
+-- we have to set the required database ro perform our related operations on the data that we will store in it
+
+USE BA;
+
+-- create some tables
+
+CREATE TABLE table1(
+student_id INT,
+Firstname TEXT,
+LastName TEXT,
+Age INT,
+Height INT
+);
+
+-- insert some records in the above table
+
+INSERT INTO table1(student_id, Firstname, LastName, Age, Height)
+VALUES (8,'Hemant','Kumar',NULL,NULL);
+-- show feature of tables using DESC command
+DESC table1;
+
+-- show the records stored in the database table
+-- *== select all the columns and display them in the result set
+
+-- Applying Conditions/filters on the query
+SELECT * FROM table1;
+
+SELECT * FROM table1 WHERE Height>=150 AND Height<=152;
+
+SELECT * FROM table1 WHERE Height>=150 OR Height<=152;
+
+SELECT * FROM table1 WHERE NOT Height>=160;
+
+SELECT * FROM table1 WHERE Age>20 AND (Height>=150 AND Height<=152);
+
+-- Sorting the result set
+-- ORDER BY clause
+SELECT * FROM table1 ORDER BY Height;
+
+-- NULL values: A field with Null value is a field with no value
+-- using IS NULL clause
+
+ SELECT * FROM table1 WHERE Age IS NOT NULL;
+
+-- using UPDATE clause: we can update the existing records in the database table
+
+UPDATE table1
+SET Firstname='Amar', LastName='Kumar', Age=28
+WHERE student_id=2;
+
+-- DELETE clause: it is used to delete the existing record in the database table
+
+DELETE FROM table1 WHERE student_id=2;
+
+-- DISTINCT clause: it will return unique records from the database table.
+
+SELECT DISTINCT Firstname, LastName FROM table1;
+
+-- Aggregated methods: MAX(), MIN(), SUM(), AVG(), COUNT()
+SELECT * FROM table1;
+
+SELECT COUNT(*) AS lenght FROM table1; -- total number of 'records'(number of rows) in the database tables
+
+SELECT MAX(Age) AS MAX_Value FROM table1;
+
+SELECT MIN(Age) AS Min_value FROM table1;
+
+SELECT SUM(Age) AS Sum_value FROM table1;
+
+SELECT AVG(Age) AS Avg_value FROM table1;
+
+-- NOTE: Aggregated Func like MAX, MIN, SUM, AVG doesnt work on NULL values.
+
+-- grouping the dataset using GROUP BY clause
+SELECT Firstname, LastName, AVG(Height) AS Avg_Height FROM table1 GROUP BY Firstname, LastName;
+
+-- NOTE: Non Aggregated Columun list in the SELECT statement should always be the part of GROUP BY clause
+
+CREATE TABLE student1(
+student_id INT,
+Firstname TEXT,
+LastName TEXT
+);
+
+CREATE TABLE info(
+student_id INT,
+Age INT,
+Height INT,
+marks INT
+);
+
+INSERT INTO student1
+VALUES (4,'Hemant','Kumar');
+
+INSERT INTO info
+VALUES (5,25,150,89);
+       
+SELECT * FROM student1 CROSS JOIN info;
+
+-- LEFT JOIN: combines all records from left table + the matching records from the right table.
+
+-- <left Table> <any type of join> <right table>
+
+SELECT a.student_id, a.FirstName, a.LastName, b.Age, b.Height, b.marks FROM student1 AS a LEFT JOIN info AS b ON a.student_id=b.student_id;
+
+-- RIGHT JOIN: combines all records from right table + the matching records from the left table.
+
+SELECT a.student_id, a.FirstName, a.LastName, b.Age, b.Height, b.marks FROM student1 AS a
+RIGHT JOIN info AS b ON a.student_id=b.student_id;
+
+-- INNER JOIN: intersection of both the tables, it will include only the matching records from both the tables.
+
+SELECT a.student_id, a.FirstName, a.LastName, b.Age, b.Height, b.marks FROM student1 AS a
+INNER JOIN info AS b ON a.student_id=b.student_id;
+
+
+-- Order of Execution
+
+SELECT column1, column2....
+FROM table1 AS a
+JOIN table2 AS b
+ON a.col1=b.col2
+WHERE <condition>
+GROUP BY column1, column2..
+HAVING <condition> MAX()>10
+ORDER BY column1, column2..
+LIMIT <limit of queries that you want in your result set>;
+
+FROM+JOINS clause > WHERE clause > GROUP BY clause > HAVING clause > SELECT clause > ORDER BY clause > LIMIT clause
+
+-- views in SQL: its very similar to database table, that is based on the parent table(original)
+
+CREATE VIEW student1_v AS SELECT * FROM student1;
+
+INSERT INTO student1
+VALUES(10, 'Ram','Mohan');
+
+SELECT * FROM student1_v;
+
+-- create an empty table with the help of view
+
+CREATE VIEW student1_view AS SELECT * FROM student1 WHERE 1=2;
+
+SELECT * FROM student1_view;
+SELECT * FROM student1;
+
+-- SQL PROCEDURE: is a predfined set of block of queries that you can use again and again without without writing the query alone in the future.
+
+DELIMITER //
+CREATE PROCEDURE print()
+	BEGIN
+		SELECT * FROM table1 WHERE Age>20 AND (Height>=150 AND Height<=152);
+    END //
+DELIMITER ;
+
+CALL print();
+
+DELIMITER //
+CREATE PROCEDURE print1(Age INT)
+	BEGIN
+		SELECT * FROM table1 WHERE Age>20 AND (Height>=150 AND Height<=152);
+    END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE print3(Age INT)
+	BEGIN
+		SELECT * FROM table1 WHERE Age=24 AND Height=150;
+    END //
+DELIMITER ;
+
+DROP PROCEDURE print3;
+CALL print3(24);
+
+-- NOTE: Procedure only allows SELECT statements only, and it only accepts the parameter(input) but doesnt return anything.
+
+-- subquery : a query within another query(nested query)
+-- subquery are executed first then the main query is executed.
+
+--  display all records from table where age is greater than the average age.
+
+SELECT * FROM table1 WHERE Age > (SELECT AVG(Age) FROM table1);
+-
+------- END--------
+
